@@ -21,9 +21,12 @@ describe('movie tickets', () => {
     cy.visit('http://qamid.tmweb.ru/admin/')
     const happyAdmin = require('../fixtures/happyPath.json')
     happyAdmin.forEach((happyEnter) => {
-      cy.get(`.body > main > section > div > form > label:nth-child(1) > input(${happyEnter.login})`)
-      cy.get(`.body > main > section > div > form > label:nth-child(2) > input(${happyEnter.password})`)
-      cy.get(`.body > main > section > div > form > div > input`).click()
+      // cy.get(`.body > main > section > div > form > label:nth-child(1) > input(${happyEnter.login})`)
+      cy.get('[type="email"]').type(happyEnter.login);
+      // cy.get(`.body > main > section > div > form > label:nth-child(2) > input(${happyEnter.password})`)
+      cy.get(('[for="pwd"]')).type(happyEnter.password);
+      // cy.get(`.body > main > section > div > form > div > input`).click()
+      cy.get('.login__button')
     })
   })
 
@@ -31,9 +34,12 @@ describe('movie tickets', () => {
     cy.visit('http://qamid.tmweb.ru/admin/')
     const sadAdmin = require('../fixtures/sadPath.json')
     sadAdmin.forEach((sadEnter) => {
-      cy.get(`.body > main > section > div > form > label:nth-child(1) > input(${sadEnter.login})`)
-      cy.get(`.body > main > section > div > form > label:nth-child(2) > input(${sadEnter.password})`)
-      cy.get(`.body > main > section > div > form > div > input`).click()
+      // cy.get(`.body > main > section > div > form > label:nth-child(1) > input(${sadEnter.login})`)
+      cy.get('[type="email"]').type(sadEnter.login);
+      // cy.get(`.body > main > section > div > form > label:nth-child(2) > input(${sadEnter.password})`)
+      cy.get(('[for="pwd"]')).type(sadEnter.password);
+      // cy.get(`.body > main > section > div > form > div > input`).click()
+      cy.get('.login__button')
   })
 })
 
