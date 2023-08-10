@@ -1,16 +1,3 @@
-// describe('template spec', () => {
-//   it('passes', () => {
-//     cy.visit('https://example.cypress.io')
-//   })
-// })
-
-// From file: example.json
-// {
-//   "name": "Using fixtures to represent data",
-//   "email": "hello@cypress.io",
-//   "body": "Fixtures are a great way to mock data for responses to routes"
-// }
-
 describe('movie tickets', () => {
 
   it('check main page', () => {
@@ -21,11 +8,8 @@ describe('movie tickets', () => {
     cy.visit('http://qamid.tmweb.ru/admin/')
     const happyAdmin = require('../fixtures/happyPath.json')
     happyAdmin.forEach((happyEnter) => {
-      // cy.get(`.body > main > section > div > form > label:nth-child(1) > input(${happyEnter.login})`)
       cy.get('[type="email"]').type(happyEnter.login);
-      // cy.get(`.body > main > section > div > form > label:nth-child(2) > input(${happyEnter.password})`)
       cy.get(('[for="pwd"]')).type(happyEnter.password);
-      // cy.get(`.body > main > section > div > form > div > input`).click()
       cy.get('.login__button')
       cy.get(`.login__button`).click()
     })
@@ -35,17 +19,14 @@ describe('movie tickets', () => {
     cy.visit('http://qamid.tmweb.ru/admin/')
     const sadAdmin = require('../fixtures/sadPath.json')
     sadAdmin.forEach((sadEnter) => {
-      // cy.get(`.body > main > section > div > form > label:nth-child(1) > input(${sadEnter.login})`)
       cy.get('[type="email"]').type(sadEnter.login);
-      // cy.get(`.body > main > section > div > form > label:nth-child(2) > input(${sadEnter.password})`)
       cy.get(('[for="pwd"]')).type(sadEnter.password);
-      // cy.get(`.body > main > section > div > form > div > input`).click()
       cy.get('.login__button')
       cy.get(`.login__button`).click()
     })
   })
 
-  it.only('check movie booking', () => {
+  it('check movie booking', () => {
     cy.visit('http://qamid.tmweb.ru/admin/')
     const adminPath = require('../fixtures/adminPath.json')
     adminPath.forEach((adminEnter) => {
@@ -54,11 +35,18 @@ describe('movie tickets', () => {
       cy.get('.login__button')
       cy.get(`.login__button`).click()
     cy.get('#grid-session > div > div.conf-step__movies > div:nth-child(1) > h3').then(($el) => $el.textContent).should('have.text','Зверополис');
-    cy.get('conf-step__seances-movie-title').invoke('text').then((text) => {
-      cy.visit("http://qamid.tmweb.ru/client/index.php");
+      cy.visit('http://qamid.tmweb.ru/client/index.php/');
       cy.get('body > main > section:nth-child(1) > div.movie__info > div.movie__description > h2').should('have.text', 'Зверополис');
-      cy.get('movie__title').click();
-    })
+      cy.get('.page-nav__day').should('have.length', 7)
+      cy.get('.page-nav__day').eq(2).click()
+      cy.get('body > main > section:nth-child(1) > div:nth-child(2) > ul > li > a').click()
+      const seats = require('../fixtures/seats.json')
+      seats.forEach((seat) => {
+        cy.get(`.buying-scheme__wrapper > :nth-child(${seat.row}) > :nth-child(${seat.seat})`).click()
+      })
+      cy.get('body > main > section > button').click()
+      cy.visit("http://qamid.tmweb.ru/client/payment.php")
+      cy.get('body > main > section > div > button').click()
     })
   })
 
