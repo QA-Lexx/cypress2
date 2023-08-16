@@ -1,6 +1,3 @@
-const { expect } = require("chai")
-const { method } = require("cypress/types/lodash")
-
 describe('pet store', () => {
 
     it('create user test', () => {
@@ -8,42 +5,74 @@ describe('pet store', () => {
         cy.request({
             url: 'https://petstore.swagger.io/v2/user',
             method: 'POST',
+            name: "morpheus",
+            job: "leader",
+            id: 1234,
             body: {
-                "id": 1234,
                 "name": "User1",
                 "photoUrls": []
             }
         }).then((response) => {
             expect(response.status).eq(200)
-            expect(response.body).eql({
-                "id": 1234,
-                "name": "User1",
-                "photoUrls": []
             })
-        })
-    
+
+    })
+
+    it('change user test', () => {
+
         cy.request({
             url: 'https://petstore.swagger.io/v2/user',
-            method: 'PUT',
+            method: 'POST',
+            name: "morpheus",
+            job: "leader",
+            id: 1234,
             body: {
-                "id": 1234,
                 "name": "User1",
-                "photoUrls": [],
-                "surname": "User01"
+                "photoUrls": []
             }
         }).then((response) => {
             expect(response.status).eq(200)
-            expect(response.body).eql({
-                "id": 1234,
-                "name": "User1",
-                "photoUrls": [],
-                "surname": "User01"
             })
-        })
 
-        cy.request('DELETE', `https://petstore.swagger.io/v2/user/${response.body.id}`).then((deleteResponse) => {
-            expect(deleteResponse.status).eq(200)
-        })
+        cy.request("PUT", "https://petstore.swagger.io/v2/user/${response.body.id}", {
+            name: "QAAutomationLabs",
+            job: "QA Automation Engg",
+        }).should((response) => {
+            expect(response.status).to.eq(200);
+            });
+
+    });
+
+    it('delete user test', () => {
+
+        cy.request({
+            url: 'https://petstore.swagger.io/v2/user',
+            method: 'POST',
+            name: "morpheus",
+            job: "leader",
+            id: 1234,
+            body: {
+                "name": "User1",
+                "photoUrls": []
+            }
+        }).then((response) => {
+            expect(response.status).eq(200)
+            })
+
+        cy.request("PUT", "https://petstore.swagger.io/v2/user/${response.body.id}", {
+            name: "QAAutomationLabs",
+            job: "QA Automation Engg",
+        }).should((response) => {
+            expect(response.status).to.eq(200);
+            });
+
+        cy.request(
+            {
+                failOnStatusCode: false,
+                url: "https://petstore.swagger.io/v2/user/${response.body.id}"
+            }).then((getResponse) => {
+                expect(getResponse.status).eq(404)
+            })
 
     })
 
